@@ -1,5 +1,5 @@
 import React from "react";
-import Img from "../../assets/ContactBg.jpeg";
+import Img from "../../assets/contactBg.jpeg";
 
 export default function ContactUs() {
   return (
