@@ -1,9 +1,52 @@
 import React, { useState } from "react";
 import { DayPicker } from "react-day-picker";
+import { useNavigate } from "react-router-dom";
 import "react-day-picker/dist/style.css";
 
 export default function AppointmentForm() {
     const [selectedDate, setSelectedDate] = useState();
+    const [name,setName] = useState("");
+    const [phone,setPhone] = useState("");
+    const [reason,setReason] = useState("");
+    const [department,setDepartment] = useState("");
+    const [time,setTime] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+ try {
+  const res = await fetch("http://localhost:5000/api/appointment",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      name,
+      phone,
+      reason,
+      department,
+      date: selectedDate,
+      time
+    })
+  });
+
+  const data = await res.json();
+
+    if (res.ok) {
+      alert("Appointment booked successfully ✅");
+
+      // redirect to home page
+      navigate("/");
+    } else {
+      alert(data.message || "Something went wrong");
+    }
+
+  } catch (error) {
+    console.log(error);
+    alert("Server error");
+  }
+};
   return (
     <div className="min-h-screen bg-blue-50 px-4 py-10 flex justify-center">
       
@@ -31,7 +74,9 @@ export default function AppointmentForm() {
             Appointment Details
           </h2>
 
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form 
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Name */}
             <div>
@@ -39,6 +84,8 @@ export default function AppointmentForm() {
               <input
                 type="text"
                 placeholder="David John"
+                value={name}
+                onChange={(e)=>setName(e.target.value)}
                 className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -49,6 +96,8 @@ export default function AppointmentForm() {
               <input
                 type="tel"
                 placeholder="(123) 456 - 789"
+                value={phone}
+                onChange={(e)=>setPhone(e.target.value)}
                 className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -56,7 +105,12 @@ export default function AppointmentForm() {
             {/* Reason for Visit */}
             <div>
               <label className="text-sm text-gray-600">Reason for Visit</label>
-              <select className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select
+                value={reason}
+                onChange={(e)=>setReason(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a reason</option>
                 <option>Routine Checkup</option>
                 <option>Consultation</option>
                 <option>Follow-up</option>
@@ -66,7 +120,12 @@ export default function AppointmentForm() {
             {/* Department */}
             <div>
               <label className="text-sm text-gray-600">Department</label>
-              <select className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select
+                value={department}
+                onChange={(e)=>setDepartment(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a department</option>
                 <option>Cardiology</option>
                 <option>Neurology</option>
                 <option>Orthopedics</option>
@@ -108,6 +167,8 @@ export default function AppointmentForm() {
   <label className="text-sm text-gray-600">Preferred Time</label>
   <input
     type="time"
+    value={time}
+    onChange={(e)=>setTime(e.target.value)}
     className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
   />
 </div>

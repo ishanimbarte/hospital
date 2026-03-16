@@ -1,7 +1,62 @@
 import React from "react";
 import Img from "../../assets/contactBg.jpeg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ContactUs() {
+
+  const [name,setName] = useState("");
+  const [email,setEmail] = useState("");
+  const [phone,setPhone] = useState("");
+  const [message,setMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+
+    const res = await fetch("http://localhost:5000/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        message
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+
+      alert("Message sent successfully ✅");
+
+      // clear form
+      setName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+
+      // redirect to home page
+      navigate("/");
+
+    } else {
+
+      alert(data.message || "Something went wrong");
+
+    }
+
+  } catch (error) {
+
+    console.log(error);
+    alert("Server error");
+
+  }
+};
   return (
   <section
     className="relative min-h-[70vh] bg-cover bg-center flex items-center"
@@ -56,26 +111,36 @@ export default function ContactUs() {
 
       {/* Right Form */}
       <div className="flex justify-center md:justify-start">
-        <form className="bg-white text-black w-full max-w-md rounded-2xl 
+        <form 
+        onSubmit={handleSubmit}
+        className="bg-white text-black w-full max-w-md rounded-2xl 
                          p-6 space-y-4 shadow-xl md:bg-transparent md:p-0 md:shadow-none">
           
           <input
             type="text"
             placeholder="Name"
+            value={name}
+            onChange={(e)=>setName(e.target.value)}
             className="w-full rounded-full px-5 py-3 border focus:outline-none"
           />
           <input
             type="email"
             placeholder="Email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
             className="w-full rounded-full px-5 py-3 border focus:outline-none"
           />
           <input
             type="tel"
             placeholder="Phone"
+            value={phone}
+            onChange={(e)=>setPhone(e.target.value)}
             className="w-full rounded-full px-5 py-3 border focus:outline-none"
           />
           <textarea
             placeholder="Message"
+            value={message}
+            onChange={(e)=>setMessage(e.target.value)}
             rows="4"
             className="w-full rounded-xl px-5 py-3 border focus:outline-none"
           ></textarea>
