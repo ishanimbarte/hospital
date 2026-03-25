@@ -57,6 +57,8 @@ export default function ContactUs() {
 
   }
 };
+
+// contact
   return (
   <section
     className="relative min-h-[70vh] bg-cover bg-center flex items-center"
