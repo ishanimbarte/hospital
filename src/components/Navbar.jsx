@@ -2,6 +2,7 @@ import { Phone, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import "@fontsource/inter";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -19,6 +20,7 @@ const navItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   const location = useLocation(); // track route changes
 
@@ -80,6 +82,9 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+              <button onClick={() => navigate("/admin/login")}>
+                Admin
+              </button>
             </nav>
 
             {/* Mobile Menu Button */}

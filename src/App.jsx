@@ -11,6 +11,9 @@ import JobApplicationForm from "./components/Careers/JobApply"; // ✅ ADD THIS
 import DiseasePage from "./components/Diseases/DiseasePage";
 import ContactPage from "./components/Contact/ContactPage";
 import ServicePage from "./components/Services/ServicePage";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
         <Route path="/disease" element={<DiseasePage />} />
         <Route path="/services" element={<ServicePage />} />
         <Route path="/contact" element={<ContactPage />} />
+
+        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
